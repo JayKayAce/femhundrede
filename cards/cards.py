@@ -10,7 +10,14 @@ Jokers will be added later.
 """
 import random
 
-suites = ["C", "H", "S", "D"] #C = Clubs, H = Hearts, S = Spades, D = Diamonds
+
+
+DECK = {"low" : range(2,10), 
+        "high" :range(10,14),
+        "Ace" : 14, 
+        "suites": ["C", "H", "S", "D"],
+        "suite_values": list(range(2,15))
+        }
 
 class Card:
     """
@@ -18,13 +25,16 @@ class Card:
 
     """
     def __init__(self, suite:str, value:int):
-        """
+        """ Instantiates a card object
         """
         self.suite = suite
         self.value = value
         self.position = None
+        self.points = 0
     
     def __repr__(self):
+        """ String representation of a card
+        """
         if self.value <= 10:
             return f"{self.suite}{self.value}"
         elif self.value == 11:
@@ -37,12 +47,17 @@ class Card:
             return f"{self.suite}A"
     
     def calculate_worth(self):
-        if self.value in range(2,10):
-            return 5
-        elif self.value in range(10,14):
-            return 10
+        """ Calculates the points of a card
+        """
+        if self.value in DECK["low"]:
+            self.points = 5
+        elif self.value in DECK["high"]:
+            self.points = 10
         else:
-            return 15
+            self.points = 15
+    
+    def get_neighbours(self):
+        pass
 
 
 class Discards:
@@ -55,7 +70,7 @@ class Discards:
         
         """
         self.topcard = None
-        self.cards = {suite:[] for suite in suites}
+        self.cards = {suite:[] for suite in DECK["suites"]}
 
     def add_card(self, card):
         self.cards[card.suite].append[card.value]
@@ -70,7 +85,7 @@ class Pile:
         None
         
         """
-        self.cards = [Card(s,v) for v in range(2,15) for s in suites]
+        self.cards = [Card(s,v) for v in DECK["suite_values"] for s in DECK["suites"]]
     def __repr__(self):
         return f"""
         Clubs: {[c for c in self.cards if c.suite == 'C']}\n
